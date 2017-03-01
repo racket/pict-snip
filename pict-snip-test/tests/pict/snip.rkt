@@ -2,6 +2,7 @@
 (require rackunit
          pict/snip
          pict
+         pict/convert
          racket/draw)
 (check-equal?
  (let ([wb (box 123)]
@@ -16,3 +17,10 @@
    (list (unbox wb) (unbox hb) (unbox db) (unbox sb)
          (unbox lb) (unbox rb)))
  (list 100 100 0 0 0 0))
+
+(check-true (pict-convertible? (new pict-snip% [pict (filled-rectangle 100 100)])))
+(check-true
+ (pict?
+  (scale
+   (new pict-snip% [pict (filled-rectangle 100 100)])
+   0)))
