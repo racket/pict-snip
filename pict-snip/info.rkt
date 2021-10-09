@@ -10,3 +10,6 @@
 (define pkg-desc "Build snips out of picts")
 
 (define pkg-authors '(robby))
+
+(define license
+  '(Apache-2.0 OR MIT))
