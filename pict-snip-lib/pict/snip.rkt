@@ -3,6 +3,7 @@
          racket/snip
          racket/draw
          racket/format
+         racket/math
          (prefix-in racket: racket/base)
          pict
          pict/convert
@@ -19,7 +20,13 @@
 
 (define pict-snip%
   (class* snip% (convert<%>)
-    (init-field pict)
+    (init-field pict [pixels-per-scroll-step #f])
+    (unless (or (natural? pixels-per-scroll-step)
+                (not pixels-per-scroll-step))
+      (error 'pict-snip%
+             "pixels-per-scroll-step init arg wrong\n  expected: ~s\n  got: ~e"
+             '(or/c #f natural?)
+             pixels-per-scroll-step))
     (define drawer (make-pict-drawer pict))
     (define/override (get-extent dc x y wb hb db sb lb rb)
       (set-box/f! wb (pict-width pict))
@@ -50,6 +57,26 @@
       (define bts (get-output-bytes bp))
       (send f put (bytes-length bts) bts))
     
+    (define/override (get-num-scroll-steps)
+      (cond
+        [pixels-per-scroll-step
+         (define height (pict-height pict))
+         (exact-ceiling (/ height pixels-per-scroll-step))]
+        [else (super get-num-scroll-steps)]))
+
+    (define/override (get-scroll-step-offset offset)
+      (cond
+        [pixels-per-scroll-step
+         (exact-floor (* offset pixels-per-scroll-step))]
+        [else
+         (super get-scroll-step-offset offset)]))
+
+    (define/override (find-scroll-step y)
+      (cond
+        [pixels-per-scroll-step
+         (exact-floor (/ y pixels-per-scroll-step))]
+        [else (super find-scroll-step y)]))
+
     (define/public (get-pict) pict)
     
     (inherit set-snipclass)
