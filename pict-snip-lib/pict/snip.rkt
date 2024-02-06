@@ -20,7 +20,7 @@
 
 (define pict-snip%
   (class* snip% (convert<%>)
-    (init-field pict [pixels-per-scroll-step #f])
+    (init-field pict [pixels-per-scroll-step 2])
     (unless (or (natural? pixels-per-scroll-step)
                 (not pixels-per-scroll-step))
       (error 'pict-snip%
