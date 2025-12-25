@@ -21,7 +21,7 @@
   (class* snip% (convert<%>)
     (init-field pict)
     (define drawer (make-pict-drawer pict))
-    (define/override (get-extent dc x y wb hb db sb lb rb)
+    (define/override (get-extent dc x y [wb #f] [hb #f] [db #f] [sb #f] [lb #f] [rb #f])
       (set-box/f! wb (pict-width pict))
       (set-box/f! hb (pict-height pict))
       (set-box/f! db (pict-descent pict))
