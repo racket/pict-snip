@@ -6,6 +6,7 @@
     pict
     racket
     racket/snip
+    racket/math
     racket/contract))
 
 
@@ -18,9 +19,18 @@
 }
 
 @defclass[pict-snip% snip% ()]{
-  @defconstructor[([pict pict?])]{
+  @defconstructor[([pict pict?]
+                   [pixels-per-scroll-step (or/c #f natural?) 2])]{
     Creates a @racket[pict-snip%] object, using
     @racket[pict] to draw.
+
+  If @racket[pixels-per-scroll-step] is @racket[#f], then the
+  snip will have only one scroll step (see
+  @method[snip% get-num-scroll-steps] for more information).
+  The default means that the scroll bars will stop every two
+  pixels.
+
+    @history[#:changed "1.1" @list{Added the @racket[pixels-per-scroll-snip] argument}]
   }
   @defmethod[(get-pict) pict?]{
     Returns the pict passed to the constructor.
